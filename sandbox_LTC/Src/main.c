@@ -4,7 +4,7 @@
   * Description        : Main program body
   ******************************************************************************
   *
-  * COPYRIGHT(c) 2016 STMicroelectronics
+  * COPYRIGHT(c) 2017 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -35,25 +35,6 @@
 #include "stm32l4xx_hal.h"
 
 /* USER CODE BEGIN Includes */
-#include "LTC6804.h"
-//#define LTC_CS_Pin 1
-
-/*
- * the following function is a counter that delays
- * it will delay correctly in the with the following setup:
- * 	time -> time*us in the assembly language
- * 	1. 1 - 3 us 		time = 10
- * 	2. 3 - 13 us		time = 15
- *  3. 13 - 3000 us		time = 20
- *
- *  from 1000 up, could use HAL_Delay(ms)
- */
-#define delayUS_ASM(us) asm volatile ( "MOV R0,%[loops]\n\t"\
-		"1: \n\t"\
-		"SUB R0, #1\n\t"\
-		"CMP R0, #0\n\t"\
-		"BNE 1b \n\t" : : [loops] "r" (20*us) : "memory"\
-     );\
 
 /* USER CODE END Includes */
 
@@ -104,7 +85,7 @@ int main(void)
   MX_USART2_UART_Init();
 
   /* USER CODE BEGIN 2 */
-  LTC6804_outloop();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -112,7 +93,6 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
-	  LTC6804_inloop();
 
   /* USER CODE BEGIN 3 */
 
