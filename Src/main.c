@@ -4,7 +4,7 @@
   * Description        : Main program body
   ******************************************************************************
   *
-  * COPYRIGHT(c) 2016 STMicroelectronics
+  * COPYRIGHT(c) 2017 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -35,32 +35,17 @@
 #include "stm32l4xx_hal.h"
 
 /* USER CODE BEGIN Includes */
+// NEW MAIN FILE!
+#include "serial.h"
 #include "LTC6804.h"
-//#define LTC_CS_Pin 1
-
-/*
- * the following function is a counter that delays
- * it will delay correctly in the with the following setup:
- * 	time -> time*us in the assembly language
- * 	1. 1 - 3 us 		time = 10
- * 	2. 3 - 13 us		time = 15
- *  3. 13 - 3000 us		time = 20
- *
- *  from 1000 up, could use HAL_Delay(ms)
- */
-#define delayUS_ASM(us) asm volatile ( "MOV R0,%[loops]\n\t"\
-		"1: \n\t"\
-		"SUB R0, #1\n\t"\
-		"CMP R0, #0\n\t"\
-		"BNE 1b \n\t" : : [loops] "r" (20*us) : "memory"\
-     );\
-
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi1;
 
 UART_HandleTypeDef huart2;
+DMA_HandleTypeDef hdma_usart2_rx;
+DMA_HandleTypeDef hdma_usart2_tx;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
@@ -71,6 +56,7 @@ UART_HandleTypeDef huart2;
 void SystemClock_Config(void);
 void Error_Handler(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART2_UART_Init(void);
 
@@ -100,11 +86,13 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_SPI1_Init();
   MX_USART2_UART_Init();
 
   /* USER CODE BEGIN 2 */
-  LTC6804_outloop();
+  Serial2_begin();
+  LTC6804();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -112,8 +100,7 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
-	  LTC6804_inloop();
-
+	  run_command(1);
   /* USER CODE BEGIN 3 */
 
   }
@@ -218,7 +205,7 @@ static void MX_USART2_UART_Init(void)
 {
 
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 230400;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -231,6 +218,24 @@ static void MX_USART2_UART_Init(void)
   {
     Error_Handler();
   }
+
+}
+
+/** 
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void) 
+{
+  /* DMA controller clock enable */
+  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1);
+
+  /* DMA interrupt init */
+  /* DMA1_Channel6_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
+  /* DMA1_Channel7_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);
 
 }
 

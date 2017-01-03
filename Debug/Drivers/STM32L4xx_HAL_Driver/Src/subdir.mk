@@ -22,7 +22,11 @@ C_SRCS += \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c \
-../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c 
+../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c \
+../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_dma.c \
+../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_exti.c \
+../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_gpio.c \
+../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_utils.c 
 
 OBJS += \
 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.o \
@@ -43,7 +47,11 @@ OBJS += \
 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.o \
 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.o \
 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.o \
-./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.o 
+./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.o \
+./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_dma.o \
+./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_exti.o \
+./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_gpio.o \
+./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_utils.o 
 
 C_DEPS += \
 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.d \
@@ -64,7 +72,11 @@ C_DEPS += \
 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.d \
 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.d \
 ./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.d \
-./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.d 
+./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.d \
+./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_dma.d \
+./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_exti.d \
+./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_gpio.d \
+./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_utils.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -72,7 +84,7 @@ Drivers/STM32L4xx_HAL_Driver/Src/%.o: ../Drivers/STM32L4xx_HAL_Driver/Src/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU GCC Compiler'
 	@echo $(PWD)
-	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -D__weak='__attribute__((weak))' -D__packed='__attribute__((__packed__))' -DUSE_HAL_DRIVER -DSTM32L432xx -I"/Users/elenahuang/Desktop/Blue Sky/blueskybms/Inc" -I"/Users/elenahuang/Desktop/Blue Sky/blueskybms/Drivers/STM32L4xx_HAL_Driver/Inc" -I"/Users/elenahuang/Desktop/Blue Sky/blueskybms/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy" -I"/Users/elenahuang/Desktop/Blue Sky/blueskybms/Drivers/CMSIS/Device/ST/STM32L4xx/Include" -I"/Users/elenahuang/Desktop/Blue Sky/blueskybms/Drivers/CMSIS/Include" -I"/Users/elenahuang/Desktop/Blue Sky/blueskybms/Inc"  -O0 -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
+	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -D__weak='__attribute__((weak))' -D__packed='__attribute__((__packed__))' -DDEBUG -DUSE_HAL_DRIVER -DSTM32L432xx -I"/Users/elenahuang/Documents/bluesky_bms/sandbox_LTC/Inc" -I"/Users/elenahuang/Documents/bluesky_bms/sandbox_LTC/Drivers/STM32L4xx_HAL_Driver/Inc" -I"/Users/elenahuang/Documents/bluesky_bms/sandbox_LTC/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy" -I"/Users/elenahuang/Documents/bluesky_bms/sandbox_LTC/Drivers/CMSIS/Device/ST/STM32L4xx/Include" -I"/Users/elenahuang/Documents/bluesky_bms/sandbox_LTC/Drivers/CMSIS/Include"  -O0 -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
